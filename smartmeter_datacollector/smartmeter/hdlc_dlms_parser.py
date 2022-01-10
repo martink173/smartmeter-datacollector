@@ -2,11 +2,16 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
+from datetime import datetime
 import logging
+from sys import byteorder
 from typing import Any, Dict, List, Optional, Tuple
+
 
 from gurux_dlms import GXByteBuffer, GXDLMSClient, GXReplyData
 from gurux_dlms.enums import InterfaceType, ObjectType, Security
@@ -14,7 +19,7 @@ from gurux_dlms.objects import GXDLMSData, GXDLMSObject, GXDLMSRegister
 from gurux_dlms.secure import GXDLMSSecureClient
 
 from .cosem import Cosem
-from .meter_data import MeterDataPoint
+from .meter_data import MeterDataPoint, MeterDataPointType
 
 LOGGER = logging.getLogger("smartmeter")
 
@@ -59,7 +64,7 @@ class HdlcDlmsParser:
         try:
             LOGGER.debug("HDLC Buffer: %s", GXByteBuffer.hex(self._hdlc_buffer))
             self._client.getData(self._hdlc_buffer, tmp, self._dlms_data)
-        except (ValueError, TypeError) as ex:
+        except ValueError as ex:
             LOGGER.warning("Failed to extract data from HDLC frame: '%s' Some data got lost.", ex)
             self._hdlc_buffer.clear()
             self._dlms_data.clear()
@@ -111,6 +116,68 @@ class HdlcDlmsParser:
                     LOGGER.warning("Invalid register value '%s'. Skipping register.", str(raw_value))
                     continue
                 data_points.append(MeterDataPoint(data_point_type, value, meter_id, timestamp))
+        return data_points
+
+    def parse_byte_string(self, replydata):
+        num_elements = replydata.data[1]
+
+        # First element
+        if replydata.data[2] == 9 and replydata.data[3] == 12:
+            year = int.from_bytes(replydata.data[4:6], byteorder="big", signed=False)
+            month = replydata.data[6]
+            day = replydata.data[7]
+            weekday = replydata.data[8]
+            hour = replydata.data[9]
+            minute = replydata.data[10]
+            second = replydata.data[11]
+            hundreth = replydata.data[12] # FF
+            deviation = int.from_bytes(replydata.data[13:15], byteorder="big", signed=False)
+            summertime = bool(replydata.data[15])
+            timestamp = datetime(year, month, day, hour, minute, second, 0, None)
+
+        # Remaining elements
+        # These OBIS registers are pushed by the meter in this order
+        obis_register_sequence =   ["1.0.1.8.0.255",
+                                    "1.0.1.8.1.255",
+                                    "1.0.1.8.2.255",
+                                    "1.0.1.7.0.255",
+                                    "1.0.2.8.0.255",
+                                    "1.0.2.8.1.255",
+                                    "1.0.2.8.2.255",
+                                    "1.0.2.7.0.255",
+                                    "1.0.3.8.0.255",
+                                    "1.0.3.8.1.255",
+                                    "1.0.3.8.2.255",
+                                    "1.0.3.7.0.255",
+                                    "1.0.4.8.0.255",
+                                    "1.0.4.8.1.255",
+                                    "1.0.4.8.2.255",
+                                    "1.0.4.7.0.255"]
+
+        data_points = [] # array of MeterDataPoint elements
+        start_byte_index_remaining_elements = 16 # start byte for subsequent elements readout
+        elements = 0 # elements counter 
+        BYTES_ELEMENT = 13 # bytes per element
+
+        for register in obis_register_sequence:
+            # Identify start byte of each element
+            element_start_byte = start_byte_index_remaining_elements + elements * BYTES_ELEMENT
+            # check values of some bytes for plausibility (octet string, string length)
+            if replydata.data[element_start_byte] == 9 and replydata.data[element_start_byte+1] == 6 and replydata.data[element_start_byte+8] == 6:
+                digits = register.split(".")
+                obis_code = map(int, digits)
+                if bytearray(obis_code) == bytes(replydata.data[element_start_byte + 2:element_start_byte + 8]):
+                    value = int.from_bytes(replydata.data[element_start_byte + 9:element_start_byte + 13], byteorder="big",signed=False)
+                    point = MeterDataPoint(self._cosem.get_register(register).data_point_type, value, "e450", timestamp)
+                    data_points.append(point)
+                else:
+                    pass
+            else:
+                pass
+            elements += 1
+        
+        self._dlms_data.clear()
+        
         return data_points
 
     @staticmethod

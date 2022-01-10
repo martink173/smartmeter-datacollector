@@ -36,6 +36,10 @@ DEFAULT_CONFIG = {
         'client_cert_path': "",
         'client_key_path': "",
     },
+    'sink2': {
+        'name': "volkszaehler",
+        'type': "vz",
+    }
     'logging': {
         'default': 'DEBUG',
         'collector': 'DEBUG',

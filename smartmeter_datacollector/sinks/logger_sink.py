@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -23,4 +25,4 @@ class LoggerSink(DataSink):
         pass
 
     async def send(self, data_point: MeterDataPoint) -> None:
-        self._logger.info(str(data_point))
+        self._logger.debug(str(data_point))

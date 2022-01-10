@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -10,9 +12,10 @@ from typing import List
 
 from .cosem import Cosem
 from .hdlc_dlms_parser import HdlcDlmsParser
-from .meter_data import MeterDataPoint
+from .meter_data import MeterDataPoint, MeterDataPointTypes
 from .serial_reader import SerialConfig, SerialReader
 
+from datetime import datetime
 
 class MeterError(Exception):
     pass
@@ -51,9 +54,9 @@ class SerialHdlcDlmsMeter(Meter):
         if received_data == SerialHdlcDlmsMeter.HDLC_FLAG:
             self._parser.append_to_hdlc_buffer(received_data)
             return
-
         self._parser.append_to_hdlc_buffer(received_data)
         if self._parser.extract_data_from_hdlc_frames():
-            dlms_objects = self._parser.parse_to_dlms_objects()
-            data_points = self._parser.convert_dlms_bundle_to_reader_data(dlms_objects)
+            data_points = self._parser.parse_byte_string(self._parser._dlms_data)
             self._notify_observers(data_points)
+            return
+            

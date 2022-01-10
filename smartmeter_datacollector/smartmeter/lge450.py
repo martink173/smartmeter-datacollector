@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -19,6 +21,7 @@ LOGGER = logging.getLogger("smartmeter")
 
 LGE450_COSEM_REGISTERS = [
     RegisterCosem("1.0.1.7.0.255", MeterDataPointTypes.ACTIVE_POWER_P.value),
+
     RegisterCosem("1.0.2.7.0.255", MeterDataPointTypes.ACTIVE_POWER_N.value),
     RegisterCosem("1.0.3.7.0.255", MeterDataPointTypes.REACTIVE_POWER_P.value),
     RegisterCosem("1.0.4.7.0.255", MeterDataPointTypes.REACTIVE_POWER_N.value),
@@ -54,7 +57,19 @@ LGE450_COSEM_REGISTERS = [
     RegisterCosem("1.0.81.7.51.255", MeterDataPointTypes.ANGLE_UI_L2.value),
     RegisterCosem("1.0.81.7.62.255", MeterDataPointTypes.ANGLE_UI_L3.value),
 
+    RegisterCosem("1.0.1.8.0.255", MeterDataPointTypes.ACTIVE_ENERGY_P_TOTAL.value),
     RegisterCosem("1.1.1.8.0.255", MeterDataPointTypes.ACTIVE_ENERGY_P.value),
+    RegisterCosem("1.0.1.8.1.255", MeterDataPointTypes.ACTIVE_ENERGY_P_T1.value),
+    RegisterCosem("1.0.1.8.2.255", MeterDataPointTypes.ACTIVE_ENERGY_P_T2.value),
+    RegisterCosem("1.0.2.8.0.255", MeterDataPointTypes.ACTIVE_ENERGY_N_TOTAL.value),
+    RegisterCosem("1.0.2.8.1.255", MeterDataPointTypes.ACTIVE_ENERGY_N_T1.value),
+    RegisterCosem("1.0.2.8.2.255", MeterDataPointTypes.ACTIVE_ENERGY_N_T2.value),
+    RegisterCosem("1.0.3.8.0.255", MeterDataPointTypes.REACTIVE_ENERGY_P_TOTAL.value),
+    RegisterCosem("1.0.3.8.1.255", MeterDataPointTypes.REACTIVE_ENERGY_P_T1.value),
+    RegisterCosem("1.0.3.8.2.255", MeterDataPointTypes.REACTIVE_ENERGY_P_T2.value),
+    RegisterCosem("1.0.4.8.0.255", MeterDataPointTypes.REACTIVE_ENERGY_N_TOTAL.value),
+    RegisterCosem("1.0.4.8.1.255", MeterDataPointTypes.REACTIVE_ENERGY_N_T1.value),
+    RegisterCosem("1.0.4.8.2.255", MeterDataPointTypes.REACTIVE_ENERGY_N_T2.value),
     RegisterCosem("1.1.2.8.0.255", MeterDataPointTypes.ACTIVE_ENERGY_N.value),
     RegisterCosem("1.1.3.8.0.255", MeterDataPointTypes.REACTIVE_ENERGY_P.value),
     RegisterCosem("1.1.4.8.0.255", MeterDataPointTypes.REACTIVE_ENERGY_N.value),

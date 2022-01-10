@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -52,11 +54,23 @@ class MeterDataPointTypes(Enum):
     ANGLE_UI_L2 = MeterDataPointType("ANGLE_UI_L2", "Angle U-I L2", "rad")
     ANGLE_UI_L3 = MeterDataPointType("ANGLE_UI_L3", "Angle U-I L3", "rad")
 
+    ACTIVE_ENERGY_P_TOTAL = MeterDataPointType("ACTIVE_ENERGY_P_TOTAL", "Active Energy + Total", "Wh")
     ACTIVE_ENERGY_P = MeterDataPointType("ACTIVE_ENERGY_P", "Active Energy +", "Wh")
     ACTIVE_ENERGY_N = MeterDataPointType("ACTIVE_ENERGY_N", "Active Energy -", "Wh")
+    ACTIVE_ENERGY_P_T1 = MeterDataPointType("ACTIVE_ENERGY_P_T1", "Active Energy + T1", "Wh")
+    ACTIVE_ENERGY_P_T2 = MeterDataPointType("ACTIVE_ENERGY_P_T2", "Active Energy + T2", "Wh")
+    ACTIVE_ENERGY_N_TOTAL = MeterDataPointType("ACTIVE_ENERGY_N_TOTAL", "Active Energy - Total", "Wh")
+    ACTIVE_ENERGY_N_T1 = MeterDataPointType("ACTIVE_ENERGY_N_T1", "Active Energy - T1", "Wh")
+    ACTIVE_ENERGY_N_T2 = MeterDataPointType("ACTIVE_ENERGY_N_T2", "Active Energy - T2", "Wh")
 
     REACTIVE_ENERGY_P = MeterDataPointType("REACTIVE_ENERGY_P", "Reactive Energy +", "VAh")
+    REACTIVE_ENERGY_P_TOTAL = MeterDataPointType("REACTIVE_ENERGY_P_TOTAL", "Reactive Energy + Total", "VAh")
+    REACTIVE_ENERGY_P_T1 = MeterDataPointType("REACTIVE_ENERGY_P_T1", "Reactive Energy + T1", "VAh")
+    REACTIVE_ENERGY_P_T2 = MeterDataPointType("REACTIVE_ENERGY_P_T2", "Reactive Energy + T2", "VAh")
     REACTIVE_ENERGY_N = MeterDataPointType("REACTIVE_ENERGY_N", "Reactive Energy -", "VAh")
+    REACTIVE_ENERGY_N_TOTAL = MeterDataPointType("REACTIVE_ENERGY_N_TOTAL", "Reactive Energy - Total", "VAh")
+    REACTIVE_ENERGY_N_T1 = MeterDataPointType("REACTIVE_ENERGY_N_T1", "Reactive Energy - T1", "VAh")
+    REACTIVE_ENERGY_N_T2 = MeterDataPointType("REACTIVE_ENERGY_N_T2", "Reactive Energy - T2", "VAh")
 
     REACTIVE_ENERGY_Q1 = MeterDataPointType("REACTIVE_ENERGY_Q1", "Reactive Energy +Ri Q1", "VAh")
     REACTIVE_ENERGY_Q2 = MeterDataPointType("REACTIVE_ENERGY_Q2", "Reactive Energy +Rc Q2", "VAh")
@@ -66,6 +80,7 @@ class MeterDataPointTypes(Enum):
     POWER_FACTOR = MeterDataPointType("POWER_FACTOR", "Power Factor", "")
     NET_FREQUENCY = MeterDataPointType("NET_FREQUENCY", "Net Frequency any Phase", "Hz")
 
+    
 
 @dataclass
 class MeterDataPoint:

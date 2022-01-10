@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -13,6 +15,7 @@ from .collector import Collector
 from .config import InvalidConfigError
 from .sinks.data_sink import DataSink
 from .sinks.logger_sink import LoggerSink
+from .sinks.volkszaehler_sink import VolkszaehlerSink
 from .sinks.mqtt_sink import MqttConfig, MqttDataSink
 from .smartmeter.iskraam550 import IskraAM550
 from .smartmeter.lge450 import LGE450
@@ -56,6 +59,10 @@ def build_sinks(config: ConfigParser) -> List[DataSink]:
         elif sink_type == "mqtt":
             mqtt_config = MqttConfig.from_sink_config(sink_config)
             sinks.append(MqttDataSink(mqtt_config))
+        elif sink_type == "vz":
+            sinks.append(VolkszaehlerSink(
+                vz_name=sink_config.get('name', "Volkszaehler")
+            ))
         else:
             raise InvalidConfigError(f"'type' is invalid or missing: {sink_type}")
     return sinks
