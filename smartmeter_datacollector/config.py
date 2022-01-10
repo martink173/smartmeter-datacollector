@@ -2,6 +2,8 @@
 # Copyright (C) 2021 Supercomputing Systems AG
 # This file is part of smartmeter-datacollector.
 #
+# Modified by Martin Krammer, 2022
+#
 # SPDX-License-Identifier: GPL-2.0-only
 # See LICENSES/README.md for more information.
 #
@@ -39,7 +41,7 @@ DEFAULT_CONFIG = {
     'sink2': {
         'name': "volkszaehler",
         'type': "vz",
-    }
+    },
     'logging': {
         'default': 'DEBUG',
         'collector': 'DEBUG',

@@ -119,6 +119,7 @@ class HdlcDlmsParser:
         return data_points
 
     def parse_byte_string(self, replydata):
+        LOGGER.debug("Parsing...")
         num_elements = replydata.data[1]
 
         # First element
@@ -170,6 +171,7 @@ class HdlcDlmsParser:
                     value = int.from_bytes(replydata.data[element_start_byte + 9:element_start_byte + 13], byteorder="big",signed=False)
                     point = MeterDataPoint(self._cosem.get_register(register).data_point_type, value, "e450", timestamp)
                     data_points.append(point)
+                    LOGGER.warning(point)
                 else:
                     pass
             else:
