@@ -7,7 +7,7 @@ The following modifications were made:
   * Parse decrypted push messages
   * Pushed OBIS codes added
   * Generate data point objects
-* Support for [Volkszaehler](www.volkszaehler.org) added
+* Support for [Volkszaehler](http://www.volkszaehler.org) added
   * Example data sink for positive/negative instantaneous power added
 
 The E450 smart meter was connected to a RaspberryPi using the provided customer interface and a BELTI USB-to-MBUS-slave module.
