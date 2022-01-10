@@ -12,6 +12,24 @@ The following modifications were made:
 
 The E450 smart meter was connected to a RaspberryPi using the provided customer interface and a BELTI USB-to-MBUS-slave module.
 
+The following data is pushed (OBIS codes):
+* 1.0.1.8.0.255
+* 1.0.1.8.1.255
+* 1.0.1.8.2.255
+* 1.0.1.7.0.255
+* 1.0.2.8.0.255
+* 1.0.2.8.1.255
+* 1.0.2.8.2.255
+* 1.0.2.7.0.255
+* 1.0.3.8.0.255
+* 1.0.3.8.1.255
+* 1.0.3.8.2.255
+* 1.0.3.7.0.255
+* 1.0.4.8.0.255
+* 1.0.4.8.1.255
+* 1.0.4.8.2.255
+* 1.0.4.7.0.255
+
 Tested with Python 3.9.
 
 # Acknowledgements
