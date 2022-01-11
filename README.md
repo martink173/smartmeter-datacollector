@@ -10,7 +10,7 @@ The following modifications were made:
 * Support for [Volkszaehler](http://www.volkszaehler.org) added
   * Example data sink for positive/negative instantaneous power added
 
-The E450 smart meter was connected to a RaspberryPi using the provided customer interface and a BELTI USB-to-MBUS-slave module.
+The software was tested on a RaspberryPi, a BELTI USB-to-MBUS-slave module was used to connect with the meter's RJ12 customer interface.
 
 The following data is pushed (OBIS codes):
 * 1.0.1.8.0.255
