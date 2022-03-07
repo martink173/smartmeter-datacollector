@@ -20,6 +20,7 @@ from gurux_dlms.secure import GXDLMSSecureClient
 
 from .cosem import Cosem
 from .meter_data import MeterDataPoint, MeterDataPointType
+from .meter_data import MeterDataPointType
 
 LOGGER = logging.getLogger("smartmeter")
 
@@ -64,11 +65,12 @@ class HdlcDlmsParser:
         try:
             LOGGER.debug("HDLC Buffer: %s", GXByteBuffer.hex(self._hdlc_buffer))
             self._client.getData(self._hdlc_buffer, tmp, self._dlms_data)
-        except ValueError as ex:
+        except (ValueError,TypeError) as ex:
             LOGGER.warning("Failed to extract data from HDLC frame: '%s' Some data got lost.", ex)
             self._hdlc_buffer.clear()
             self._dlms_data.clear()
             return False
+
 
         if not self._dlms_data.isComplete():
             LOGGER.debug("HDLC frame incomplete and will not be parsed yet.")
@@ -179,7 +181,7 @@ class HdlcDlmsParser:
             elements += 1
         
         self._dlms_data.clear()
-        
+
         return data_points
 
     @staticmethod
