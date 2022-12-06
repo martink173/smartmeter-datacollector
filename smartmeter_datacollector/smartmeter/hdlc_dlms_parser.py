@@ -11,7 +11,7 @@ from datetime import datetime
 import logging
 from sys import byteorder
 from typing import Any, Dict, List, Optional, Tuple
-
+import os.path
 
 from gurux_dlms import GXByteBuffer, GXDLMSClient, GXReplyData
 from gurux_dlms.enums import InterfaceType, ObjectType, Security
@@ -161,7 +161,7 @@ class HdlcDlmsParser:
         start_byte_index_remaining_elements = 16 # start byte for subsequent elements readout
         elements = 0 # elements counter 
         BYTES_ELEMENT = 13 # bytes per element
-
+        meter_id = os.path.basename(self._cosem._fallback_id) or "e450"
         for register in obis_register_sequence:
             # Identify start byte of each element
             element_start_byte = start_byte_index_remaining_elements + elements * BYTES_ELEMENT
@@ -171,7 +171,7 @@ class HdlcDlmsParser:
                 obis_code = map(int, digits)
                 if bytearray(obis_code) == bytes(replydata.data[element_start_byte + 2:element_start_byte + 8]):
                     value = int.from_bytes(replydata.data[element_start_byte + 9:element_start_byte + 13], byteorder="big",signed=False)
-                    point = MeterDataPoint(self._cosem.get_register(register).data_point_type, value, "e450", timestamp)
+                    point = MeterDataPoint(self._cosem.get_register(register).data_point_type, value, meter_id, timestamp)
                     data_points.append(point)
                     LOGGER.warning(point)
                 else:
