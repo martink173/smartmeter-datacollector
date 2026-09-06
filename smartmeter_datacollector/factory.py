@@ -14,6 +14,7 @@ from typing import List
 from .collector import Collector
 from .config import InvalidConfigError
 from .sinks.data_sink import DataSink
+from .sinks.goe_sink import GoEDataSink
 from .sinks.logger_sink import LoggerSink
 from .sinks.volkszaehler_sink import VolkszaehlerSink
 from .sinks.mqtt_sink import MqttConfig, MqttDataSink
@@ -63,6 +64,8 @@ def build_sinks(config: ConfigParser) -> List[DataSink]:
             sinks.append(VolkszaehlerSink(
                 vz_name=sink_config.get('name', "Volkszaehler")
             ))
+        elif sink_type == "goe":
+            sinks.append(GoEDataSink.from_sink_config(sink_config))
         else:
             raise InvalidConfigError(f"'type' is invalid or missing: {sink_type}")
     return sinks
